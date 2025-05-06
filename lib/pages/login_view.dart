@@ -50,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   Center(
                     child: Text(
-                      'Chat App',
+                      'NullTalk',
                       style: TextStyle(
                         fontSize: 32,
                         color: Colors.white,
@@ -79,8 +79,10 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   SizedBox(height: screenHeight * 0.02),
                   CustomTextField(
+                    isObscure: true,
                     onChange: (data) {
                       password = data;
+
                     },
 
                     icon: Icon(Icons.lock),
@@ -98,7 +100,11 @@ class _LoginViewState extends State<LoginView> {
                         try {
                           await loginUser();
 
-                          Navigator.pushNamed(context, 'ChatView');
+                          Navigator.pushNamed(
+                            context,
+                            'ChatView',
+                            arguments: email,
+                          );
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
                             showSnakeBar(

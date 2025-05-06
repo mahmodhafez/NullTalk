@@ -1,13 +1,22 @@
 import 'package:chat_app/constants.dart';
+import 'package:chat_app/models/message_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/chat_bubble.dart';
 
 class ChatView extends StatelessWidget {
-  const ChatView({super.key});
+  ChatView({super.key});
+
+  CollectionReference messages = FirebaseFirestore.instance.collection(
+    kMessagesCollections,
+  );
+  TextEditingController textFieldController = TextEditingController();
+  ScrollController listController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    String email = ModalRoute.of(context)!.settings.arguments as String;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -37,22 +46,59 @@ class ChatView extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: 9,
-              itemBuilder:
-                  (context, index) => Align(
-                    alignment: Alignment.centerLeft,
+            child: StreamBuilder<QuerySnapshot>(
+              stream: messages.orderBy(kCreateAt, descending: true).snapshots(),
 
-                    child: ChatBubble(),
-                  ),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<MessageModel> messagesList = [];
+                  for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                    messagesList.add(
+                      MessageModel.fromJson(snapshot.data!.docs[i]),
+                    );
+                  }
+                  return ListView.builder(
+                    reverse: true,
+                    controller: listController,
+                    itemCount: messagesList.length,
+                    itemBuilder: (context, index) {
+                      print(messagesList[index].id);
+                      return messagesList[index].id == email
+                          ? ChatBubbleSender(
+                            message: messagesList[index].message,
+                          )
+                          : ChatBubbleReceive(
+                            message: messagesList[index].message,
+                          );
+                    },
+                  );
+                } else {
+                  return Center(child: Text('Loading...'));
+                }
+              },
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(22.0),
             child: TextField(
+              controller: textFieldController,
+              onSubmitted: (value) {
+                messages.add({
+                  kId: email,
 
+                  kMessage: value,
+                  kCreateAt: DateTime.now(),
+                });
+
+                textFieldController.clear();
+                listController.animateTo(
+                  0,
+                  curve: Curves.fastOutSlowIn,
+                  duration: Duration(seconds: 1),
+                );
+              },
               decoration: InputDecoration(
-              hintText: 'Send Message',
+                hintText: 'Send Message',
                 contentPadding: const EdgeInsets.all(8.0),
                 suffixIcon: IconButton(
                   onPressed: () {},

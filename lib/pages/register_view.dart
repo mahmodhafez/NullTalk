@@ -47,7 +47,7 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   Center(
                     child: Text(
-                      'Chat App',
+                      'NullTalk',
                       style: TextStyle(
                         fontSize: 32,
                         color: Colors.white,
