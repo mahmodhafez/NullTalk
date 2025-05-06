@@ -22,6 +22,8 @@ A dark-themed real-time chat application built with Flutter and Firebase.
 📂 Cloud Firestore
 
 📁 Project Structure
+
+```
 bash
 Copy
 Edit
@@ -47,3 +49,4 @@ lib/
 ├── constants.dart               # Global constants (colors, strings)
 ├── firebase_options.dart        # Firebase config (auto-generated)
 └── main.dart                    # App entry point
+```
