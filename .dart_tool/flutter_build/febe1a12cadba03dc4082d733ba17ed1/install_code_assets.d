@@ -1,0 +1,1 @@
+ D:\\Space\\chat_app\\.dart_tool\\flutter_build\\febe1a12cadba03dc4082d733ba17ed1\\native_assets.json: 
