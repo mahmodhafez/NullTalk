@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
-  const ChatBubble({
-    super.key,
-
-  });
-
-
+  const ChatBubble({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
 
-      margin: EdgeInsets.symmetric(vertical: 4 , horizontal: 10),
-
-      padding: EdgeInsets.symmetric(vertical: 30 ,horizontal: 30),
+      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
       decoration: BoxDecoration(
         color: Colors.amber,
 
